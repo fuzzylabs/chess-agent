@@ -15,7 +15,7 @@ If you haven't already done so, please read [DEVELOPMENT.md](DEVELOPMENT.md) for
 - Create [API key](https://lichess.org/account/oauth/token).
 > [!NOTE]
 > When creating an API key only the `board:play` scope is required.
-> [#create-api-key.png](docs/imgs/create-api-key.png)
+> ![create-api-key.png](docs/imgs/create-api-key.png)
 
 Set up project:
 
