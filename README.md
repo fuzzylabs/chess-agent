@@ -4,8 +4,7 @@
 
 An LLM agent built using Model Context Protocol to play online games
 
-# &#127939; How do I get started?
-If you haven't already done so, please read [DEVELOPMENT.md](DEVELOPMENT.md) for instructions on how to set up your virtual environment using Poetry.
+![agent-uno-video](docs/imgs/agent-uno-video.mov)
 
 # Pre-requisites
 
