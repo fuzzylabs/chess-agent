@@ -39,6 +39,12 @@ class CreatedGame(BaseModel):
     full_id: str = Field(alias="fullId")
 
 
+class UIConfig(BaseModel):
+    """The UI configuration of a game."""
+
+    url: str
+
+
 class State(BaseModel):
     """A representation of the game state."""
 

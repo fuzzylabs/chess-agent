@@ -15,6 +15,7 @@ from core.schemas import (  # type: ignore [import-not-found]
     AccountInfo,
     CreatedGame,
     CurrentState,
+    UIConfig,
 )
 from mcp.server.fastmcp import FastMCP  # type: ignore [import-not-found]
 
@@ -65,7 +66,7 @@ async def get_account_info() -> AccountInfo:
 
 @client_is_set_handler
 @mcp.tool(description="Create a new game.")  # type: ignore
-async def create_game() -> str:
+async def create_game() -> UIConfig:
     """An endpoint for creating a new game."""
     response = CreatedGame(
         **session_state["client"].challenges.create_ai(color="black")
@@ -73,7 +74,7 @@ async def create_game() -> str:
 
     session_state["id"] = response.id
 
-    return f"You can view the game taking place here: https://lichess-org.github.io/api-demo/#!/game/{response.id}"
+    return UIConfig(url=f"https://lichess-org.github.io/api-demo/#!/game/{response.id}")
 
 
 @client_is_set_handler
