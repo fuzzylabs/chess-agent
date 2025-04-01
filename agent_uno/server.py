@@ -5,6 +5,7 @@ Aim:
 # 2. Agent is able to start a game
 # 3. Agent is able to play the game by getting the current state and making moves.
 """
+import datetime
 
 from berserk import Client, TokenSession  # type: ignore [import-not-found]
 from mcp.server.fastmcp import FastMCP  # type: ignore [import-not-found]
@@ -17,8 +18,8 @@ class AccountInfo(BaseModel):
     id: str
     username: str
     perfs: dict[str, dict[str, int | bool]]
-    created_at: str = Field(alias="createdAt")
-    seen_at: str = Field(alias="seenAt")
+    created_at: datetime.datetime = Field(alias="createdAt")
+    seen_at: datetime.datetime = Field(alias="seenAt")
     play_time: dict[str, int] = Field(alias="playTime")
     url: str
     count: dict[str, int]
