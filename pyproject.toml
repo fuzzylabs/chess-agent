@@ -7,9 +7,9 @@ readme = "README.md"
 requires-python = ">=3.12,<4.0"
 dependencies = [
     "berserk>=0.13.2",
- "mcp[cli]>=1.6.0",
- "pydantic>=2.11.1",
- "python-chess>=1.999",
+    "mcp[cli]>=1.6.0",
+    "pydantic>=2.11.1",
+    "python-chess>=1.999",
 ]
 
 [dependency-groups]
