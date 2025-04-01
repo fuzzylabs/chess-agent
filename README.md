@@ -11,7 +11,7 @@ If you haven't already done so, please read [DEVELOPMENT.md](DEVELOPMENT.md) for
 
 - `uv` installable via brew.
 - [Claude Desktop](https://claude.ai/download)
-- Create [Lichess account](https://lichess.org) and [API key](https://lichess.org/api).
+- Create [Lichess account](https://lichess-org.github.io/api-demo/) and [API key](https://lichess.org/api).
 
 Set up project:
 
