@@ -1,5 +1,5 @@
 <h1 align="center">
-    agent_uno :chess_pawn:;
+    agent_uno :chess_pawn:
 </h1>
 
 An LLM agent built using Model Context Protocol to play online games
