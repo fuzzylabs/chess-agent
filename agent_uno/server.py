@@ -6,8 +6,6 @@ Aim:
 # 3. Agent is able to play the game by getting the current state and making moves.
 """
 import datetime
-
-import datetime
 from typing import cast
 
 from berserk import Client, TokenSession  # type: ignore [import-not-found]
