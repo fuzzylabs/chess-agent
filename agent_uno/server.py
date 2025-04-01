@@ -21,6 +21,8 @@ from mcp.server.fastmcp import FastMCP  # type: ignore [import-not-found]
 
 mcp = FastMCP("chess-mcp", dependencies=["berserk", "python-chess"])
 
+BOT_LEVEL = 3
+
 session_state = {}
 
 
@@ -69,7 +71,7 @@ async def get_account_info() -> AccountInfo:
 async def create_game() -> UIConfig:
     """An endpoint for creating a new game."""
     response = CreatedGame(
-        **session_state["client"].challenges.create_ai(color="black")
+        **session_state["client"].challenges.create_ai(color="black", level=BOT_LEVEL)
     )
 
     session_state["id"] = response.id
