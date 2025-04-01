@@ -37,6 +37,8 @@ repos:
       - id: mypy
         args: ["--config-file=pyproject.toml"]
         exclude: ^tests/
+        additional_dependencies:
+          - "pydantic>=2.0"
 
   - repo: https://github.com/crate-ci/typos
     rev: typos-dict-v0.11.2
