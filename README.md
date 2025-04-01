@@ -1,5 +1,5 @@
 <h1 align="center">
-    agent_uno &#128679;
+    agent_uno :chess_pawn:;
 </h1>
 
 An LLM agent built using Model Context Protocol to play online games
@@ -14,7 +14,8 @@ If you haven't already done so, please read [DEVELOPMENT.md](DEVELOPMENT.md) for
 - Create [Lichess account](https://lichess.org/signup)
 - Create [API key](https://lichess.org/account/oauth/token).
 > [!NOTE]
-> When creating an API key only the `board:play` scope is required.
+> When creating an API key only the `board:play` scope is required.\
+>
 > ![create-api-key.png](docs/imgs/create-api-key.png)
 
 Set up project:
