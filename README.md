@@ -4,8 +4,6 @@
 
 An LLM agent built using Model Context Protocol to play online games
 
-![agent-uno-video](docs/imgs/agent-uno-video.mov)
-
 # Pre-requisites
 
 - `uv` installable via brew.
