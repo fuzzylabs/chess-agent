@@ -5,12 +5,18 @@ Aim:
 # 2. Agent is able to start a game
 # 3. Agent is able to play the game by getting the current state and making moves.
 """
+
 import datetime
+import os
 from typing import cast
 
 from berserk import Client, TokenSession  # type: ignore [import-not-found]
+from dotenv import load_dotenv  # type: ignore [import-not-found]
 from mcp.server.fastmcp import FastMCP  # type: ignore [import-not-found]
 from pydantic import BaseModel, Field
+
+# Load environment variables from the .env file
+load_dotenv()
 
 
 class AccountInfo(BaseModel):
@@ -52,12 +58,17 @@ session_state = {}
 
 
 @mcp.tool(description="Login to LiChess.")  # type: ignore
-async def login(api_key: str) -> None:
+async def login() -> None:
     """Login to LiChess using the provided API key.
 
     Args:
         api_key: The API key to use for logging in.
     """
+    api_key: str = os.getenv("API_KEY") or ""
+    if not api_key:
+        raise ValueError(
+            "API_KEY not found in environment variables. Please set it in your .env"
+        )
     session = TokenSession(api_key)
     session_state["client"] = Client(session)
 
