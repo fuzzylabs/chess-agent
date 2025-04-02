@@ -8,15 +8,15 @@ Aim:
 from collections.abc import Callable
 from typing import Any, cast
 
-from berserk import Client, TokenSession  # type: ignore [import-not-found]
-from chess import Board  # type: ignore [import-not-found]
-from core.schemas import (  # type: ignore [import-not-found]
+from berserk import Client, TokenSession
+from chess import Board
+from core.schemas import (
     AccountInfo,
     CreatedGame,
     CurrentState,
     UIConfig,
 )
-from mcp.server.fastmcp import FastMCP  # type: ignore [import-not-found]
+from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("chess-mcp", dependencies=["berserk", "python-chess"])
 
@@ -69,11 +69,23 @@ async def get_account_info() -> AccountInfo:
 
 
 @client_is_set_handler
-@mcp.tool(description="Create a new game.")  # type: ignore
-async def create_game() -> UIConfig:
+@mcp.tool(description="Create a new game against an AI.")  # type: ignore
+async def create_game_against_ai(level: int = BOT_LEVEL) -> UIConfig:
     """An endpoint for creating a new game."""
     response = CreatedGame(
-        **session_state["client"].challenges.create_ai(color="black", level=BOT_LEVEL)
+        **session_state["client"].challenges.create_ai(color="black", level=level)
+    )
+    session_state["id"] = response.id
+
+    return UIConfig(url=f"https://lichess-org.github.io/api-demo/#!/game/{response.id}")
+
+
+@client_is_set_handler
+@mcp.tool(description="Create a new game against a person.")  # type: ignore
+async def create_game_against_person(username: str) -> UIConfig:
+    """An endpoint for creating a new game."""
+    response = CreatedGame(
+        **session_state["client"].challenges.create(color="black", username=username)
     )
     session_state["id"] = response.id
 
