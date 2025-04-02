@@ -25,12 +25,16 @@ BOT_LEVEL = 3
 session_state = {}
 
 
+def _is_value_in_session_state(value: str, msg: str) -> None:
+    if value not in session_state:
+        raise Exception(f"{value} is not set. {msg}.")
+
+
 def client_is_set_handler(func: Callable[[], Any]) -> Callable[[], Any]:
     """A decorator to check if the client is set."""
 
     def is_set_wrapper(*args: Any, **kwargs: dict[str, Any]) -> Any:
-        if "client" not in session_state:
-            raise Exception("Client is not set. You need to log in first.")
+        _is_value_in_session_state("client", "You need to log in first.")
         return func(*args, **kwargs)
 
     return is_set_wrapper
@@ -40,8 +44,7 @@ def id_is_set_handler(func: Callable[[], Any]) -> Callable[[], Any]:
     """A decorator to check if the ID is set."""
 
     def is_set_wrapper(*args: Any, **kwargs: dict[str, Any]) -> Any:
-        if "id" not in session_state:
-            raise Exception("ID is not set. You need to start a game first.")
+        _is_value_in_session_state("id", "You need to start a game first.")
         return func(*args, **kwargs)
 
     return is_set_wrapper
