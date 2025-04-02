@@ -10,7 +10,7 @@ import os
 from collections.abc import Callable
 from typing import Any, Optional, cast
 
-from berserk import Client, TokenSession
+from berserk import Client, TokenSession, exceptions
 from chess import Board
 from core.schemas import (
     AccountInfo,
@@ -29,6 +29,13 @@ mcp = FastMCP("chess-mcp", dependencies=["berserk", "python-chess"])
 BOT_LEVEL = 3
 LICHESS_ADDRESS = "https://lichess.org"
 COLOR = "black"
+
+NOT_STARTED_MSG = """The game has not started yet please poll the is_opponent_turn
+endpoint until 10 times until the game starts. If this does not produce a response in
+10 polls then exit.
+"""
+AGENT_TURN_MSG = "The opponent has made their first move."
+OPPONENT_TURN_MSG = "It is the opponent's turn. Please wait for them to make a move."
 
 SESSION_STATE = {}
 
@@ -108,6 +115,22 @@ async def create_game_against_person(username: str) -> UIConfig:
 
 
 @client_is_set_handler
+@mcp.tool(description="Whether the opponent had made there first move or not.")  # type: ignore
+async def is_opponent_turn() -> str:
+    """Whether the opponent had made there first move or not."""
+    moves = await get_previous_moves()
+    if isinstance(moves, str):
+        return NOT_STARTED_MSG
+
+    n_moves = len(moves)
+
+    if n_moves % 2 == 0 and n_moves > 0:
+        return AGENT_TURN_MSG
+    else:
+        return OPPONENT_TURN_MSG
+
+
+@client_is_set_handler
 @id_is_set_handler
 @mcp.tool(description="End game.")  # type: ignore
 async def end_game() -> None:
@@ -125,26 +148,37 @@ async def get_game_state() -> CurrentState:
 
 
 @mcp.tool(description="Get all previous moves in the match.")  # type: ignore
-async def get_previous_moves() -> list[str]:
+async def get_previous_moves() -> list[str] | str:
     """Get all previous moves in the match."""
-    current_state = await get_game_state()
+    try:
+        current_state = await get_game_state()
+    except exceptions.ResponseError:
+        return NOT_STARTED_MSG
     return cast(list[str], current_state.state.moves.split())
 
 
 @client_is_set_handler
 @id_is_set_handler
 @mcp.tool(description="Make a move.")  # type: ignore
-async def make_move(move: str) -> None:
+async def make_move(move: str) -> None | str:
     """Make a move in the current game."""
-    SESSION_STATE["client"].board.make_move(SESSION_STATE["id"], move)
+    try:
+        SESSION_STATE["client"].board.make_move(SESSION_STATE["id"], move)
+    except exceptions.ResponseError:
+        return NOT_STARTED_MSG
 
 
 @mcp.tool(description="Get the current board.")  # type: ignore
 async def get_board() -> str:
     """An endpoint for getting the current board as an ASCII representation."""
+    moves = await get_previous_moves()
+
+    if isinstance(moves, str):
+        return NOT_STARTED_MSG
+
     board = Board()
 
-    for move in await get_previous_moves():
+    for move in moves:
         board.push_uci(move)
 
     return cast(str, board.__str__())
