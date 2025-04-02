@@ -12,7 +12,8 @@ from berserk import Client, TokenSession
 from chess import Board
 from core.schemas import (
     AccountInfo,
-    CreatedGame,
+    CreatedGameAI,
+    CreatedGamePerson,
     CurrentState,
     UIConfig,
 )
@@ -21,12 +22,14 @@ from mcp.server.fastmcp import FastMCP
 mcp = FastMCP("chess-mcp", dependencies=["berserk", "python-chess"])
 
 BOT_LEVEL = 3
+LICHESS_ADDRESS = "https://lichess.org"
+COLOR = "black"
 
-session_state = {}
+SESSION_STATE = {}
 
 
 def _is_value_in_session_state(value: str, msg: str) -> None:
-    if value not in session_state:
+    if value not in SESSION_STATE:
         raise Exception(f"{value} is not set. {msg}.")
 
 
@@ -58,38 +61,40 @@ async def login(api_key: str) -> None:
         api_key: The API key to use for logging in.
     """
     session = TokenSession(api_key)
-    session_state["client"] = Client(session)
+    SESSION_STATE["client"] = Client(session)
 
 
 @client_is_set_handler
 @mcp.tool(description="Get account info.")  # type: ignore
 async def get_account_info() -> AccountInfo:
     """Get the account info of the logged in user."""
-    return AccountInfo(**session_state["client"].account.get())
+    return AccountInfo(**SESSION_STATE["client"].account.get())
 
 
 @client_is_set_handler
 @mcp.tool(description="Create a new game against an AI.")  # type: ignore
 async def create_game_against_ai(level: int = BOT_LEVEL) -> UIConfig:
     """An endpoint for creating a new game."""
-    response = CreatedGame(
-        **session_state["client"].challenges.create_ai(color="black", level=level)
+    response = CreatedGameAI(
+        **SESSION_STATE["client"].challenges.create_ai(color=COLOR, level=level)
     )
-    session_state["id"] = response.id
+    SESSION_STATE["id"] = response.id
 
-    return UIConfig(url=f"https://lichess-org.github.io/api-demo/#!/game/{response.id}")
+    return UIConfig(url=f"{LICHESS_ADDRESS}/{response.id}")
 
 
 @client_is_set_handler
 @mcp.tool(description="Create a new game against a person.")  # type: ignore
 async def create_game_against_person(username: str) -> UIConfig:
     """An endpoint for creating a new game."""
-    response = CreatedGame(
-        **session_state["client"].challenges.create(color="black", username=username)
+    response = CreatedGamePerson(
+        **SESSION_STATE["client"].challenges.create(
+            color=COLOR, username=username, rated=False
+        )
     )
-    session_state["id"] = response.id
+    SESSION_STATE["id"] = response.id
 
-    return UIConfig(url=f"https://lichess-org.github.io/api-demo/#!/game/{response.id}")
+    return UIConfig(url=f"{LICHESS_ADDRESS}/{response.id}")
 
 
 @client_is_set_handler
@@ -97,7 +102,7 @@ async def create_game_against_person(username: str) -> UIConfig:
 @mcp.tool(description="End game.")  # type: ignore
 async def end_game() -> None:
     """End the current game."""
-    session_state["client"].board.resign_game(session_state["id"])
+    SESSION_STATE["client"].board.resign_game(SESSION_STATE["id"])
 
 
 @client_is_set_handler
@@ -105,7 +110,7 @@ async def end_game() -> None:
 async def get_game_state() -> CurrentState:
     """Get the current game state."""
     return CurrentState(
-        **next(session_state["client"].board.stream_game_state(session_state["id"]))
+        **next(SESSION_STATE["client"].board.stream_game_state(SESSION_STATE["id"]))
     )
 
 
@@ -121,7 +126,7 @@ async def get_previous_moves() -> list[str]:
 @mcp.tool(description="Make a move.")  # type: ignore
 async def make_move(move: str) -> None:
     """Make a move in the current game."""
-    session_state["client"].board.make_move(session_state["id"], move)
+    SESSION_STATE["client"].board.make_move(SESSION_STATE["id"], move)
 
 
 @mcp.tool(description="Get the current board.")  # type: ignore

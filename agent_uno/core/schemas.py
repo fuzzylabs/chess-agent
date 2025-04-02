@@ -22,7 +22,7 @@ class AccountInfo(BaseModel):
     blocking: bool
 
 
-class CreatedGame(BaseModel):
+class CreatedGameAI(BaseModel):
     """The response of creating a new game."""
 
     id: str
@@ -37,6 +37,22 @@ class CreatedGame(BaseModel):
     status: dict[str, str | int]
     player: str
     full_id: str = Field(alias="fullId")
+
+
+class CreatedGamePerson(BaseModel):
+    """The response of creating a new game."""
+
+    id: str
+    url: str
+    status: str
+    challenger: dict[str, Optional[str | int]]
+    dest_user: dict[str, Optional[str | int]] = Field(alias="destUser")
+    variant: dict[str, str]
+    time_control: dict[str, str] = Field(alias="timeControl")
+    color: str
+    final_color: str = Field(alias="finalColor")
+    perf: dict[str, str]
+    direction: str
 
 
 class UIConfig(BaseModel):
