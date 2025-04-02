@@ -22,6 +22,8 @@ from core.schemas import (
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 
+load_dotenv()
+
 mcp = FastMCP("chess-mcp", dependencies=["berserk", "python-chess"])
 
 BOT_LEVEL = 3
@@ -34,10 +36,6 @@ SESSION_STATE = {}
 def _is_value_in_session_state(value: str, msg: str) -> None:
     if value not in SESSION_STATE:
         raise Exception(f"{value} is not set. {msg}.")
-
-
-# Load environment variables from the .env file
-load_dotenv()
 
 
 def client_is_set_handler(func: Callable[[], Any]) -> Callable[[], Any]:
