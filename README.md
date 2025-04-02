@@ -40,7 +40,7 @@ uv run mcp install server.py
 
 > Can you please log into the Chess API and then create a game against an AI. Once the game has been created the opponent will make the first move. Can you use the previous moves and the layout of the board to determine what an optimal next move will be and then make your own move playing continuously back and forth until completion? Please use the UCI chess standard for your moves, e.g., e2e4.
 
-:chess_pawn: Agent vs. User :person::
+:chess_pawn: Agent vs. User :adult::
 
 1. Ask agent to login and create a game against a user:
 
