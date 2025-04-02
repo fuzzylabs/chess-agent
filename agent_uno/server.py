@@ -8,7 +8,7 @@ Aim:
 
 import os
 from collections.abc import Callable
-from typing import Any, cast
+from typing import Any, Optional, cast
 
 from berserk import Client, TokenSession  # type: ignore [import-not-found]
 from chess import Board  # type: ignore [import-not-found]
@@ -60,7 +60,7 @@ async def login() -> None:
     Args:
         api_key: The API key to use for logging in.
     """
-    api_key: str = os.getenv("API_KEY") or ""
+    api_key: Optional[str] = os.getenv("API_KEY")
     if not api_key:
         raise ValueError(
             "API_KEY not found in environment variables. Please set it in your .env"

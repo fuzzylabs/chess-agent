@@ -38,5 +38,5 @@ uv run mcp install server.py
 
 Example prompt:
 
-> an you please log into the Chess API and then create a game. Once the game has been created the opponent will make the first move. Can you use the previous moves and the layout of the board to determine what an optimal next move will be and then make your own move playing continuously back and forth until completion? Please use the UCI chess standard for your moves, e.g., e2e4.
+> Can you please log into the Chess API and then create a game. Once the game has been created the opponent will make the first move. Can you use the previous moves and the layout of the board to determine what an optimal next move will be and then make your own move playing continuously back and forth until completion? Please use the UCI chess standard for your moves, e.g., e2e4.
 > If you face issues with server starting in the Claude desktop this could be because of the relative path for the `command` in the server config. This will need to be changed to the absolute path to `uv` on your machine in this case. See [GH issue](https://github.com/cline/cline/issues/1160) for more details.
