@@ -8,47 +8,46 @@ Aim:
 import datetime
 from typing import cast
 
+from collections.abc import Callable
+from typing import Any, cast
+
 from berserk import Client, TokenSession  # type: ignore [import-not-found]
+from chess import Board  # type: ignore [import-not-found]
+from core.schemas import (  # type: ignore [import-not-found]
+    AccountInfo,
+    CreatedGame,
+    CurrentState,
+    UIConfig,
+)
 from mcp.server.fastmcp import FastMCP  # type: ignore [import-not-found]
-from pydantic import BaseModel, Field
 
+mcp = FastMCP("chess-mcp", dependencies=["berserk", "python-chess"])
 
-class AccountInfo(BaseModel):
-    """The account info of a LiChess user."""
-
-    id: str
-    username: str
-    perfs: dict[str, dict[str, int | bool]]
-    created_at: datetime.datetime = Field(alias="createdAt")
-    seen_at: datetime.datetime = Field(alias="seenAt")
-    play_time: dict[str, int] = Field(alias="playTime")
-    url: str
-    count: dict[str, int]
-    followable: bool
-    following: bool
-    blocking: bool
-
-
-class CreatedGame(BaseModel):
-    """The response of creating a new game."""
-
-    id: str
-    rated: bool
-    variant: dict[str, str]
-    fen: str
-    turns: int
-    source: str
-    speed: str
-    perf: str
-    created_at: datetime.datetime = Field(alias="createdAt")
-    status: dict[str, str | int]
-    player: str
-    full_id: str = Field(alias="fullId")
-
-
-mcp = FastMCP("chess-mcp", dependencies=["berserk"])
+BOT_LEVEL = 3
 
 session_state = {}
+
+
+def client_is_set_handler(func: Callable[[], Any]) -> Callable[[], Any]:
+    """A decorator to check if the client is set."""
+
+    def is_set_wrapper(*args: Any, **kwargs: dict[str, Any]) -> Any:
+        if "client" not in session_state:
+            raise Exception("Client is not set. You need to log in first.")
+        return func(*args, **kwargs)
+
+    return is_set_wrapper
+
+
+def id_is_set_handler(func: Callable[[], Any]) -> Callable[[], Any]:
+    """A decorator to check if the ID is set."""
+
+    def is_set_wrapper(*args: Any, **kwargs: dict[str, Any]) -> Any:
+        if "id" not in session_state:
+            raise Exception("ID is not set. You need to start a game first.")
+        return func(*args, **kwargs)
+
+    return is_set_wrapper
 
 
 @mcp.tool(description="Login to LiChess.")  # type: ignore
@@ -62,40 +61,64 @@ async def login(api_key: str) -> None:
     session_state["client"] = Client(session)
 
 
+@client_is_set_handler
 @mcp.tool(description="Get account info.")  # type: ignore
 async def get_account_info() -> AccountInfo:
     """Get the account info of the logged in user."""
     return AccountInfo(**session_state["client"].account.get())
 
 
+@client_is_set_handler
 @mcp.tool(description="Create a new game.")  # type: ignore
-async def create_game() -> str:
+async def create_game() -> UIConfig:
     """An endpoint for creating a new game."""
     response = CreatedGame(
-        **session_state["client"].challenges.create_ai(color="black")
+        **session_state["client"].challenges.create_ai(color="black", level=BOT_LEVEL)
     )
 
     session_state["id"] = response.id
 
-    return f"You can view the game taking place here: https://lichess-org.github.io/api-demo/#!/game/{response.id}"
+    return UIConfig(url=f"https://lichess-org.github.io/api-demo/#!/game/{response.id}")
 
 
+@client_is_set_handler
+@id_is_set_handler
 @mcp.tool(description="End game.")  # type: ignore
 async def end_game() -> None:
     """End the current game."""
     session_state["client"].board.resign_game(session_state["id"])
 
 
-@mcp.tool(description="Get the current game state.")  # type: ignore
-async def get_game_state() -> str:
+@client_is_set_handler
+@id_is_set_handler
+async def get_game_state() -> CurrentState:
     """Get the current game state."""
-    current_state = next(
-        session_state["client"].board.stream_game_state(session_state["id"])
+    return CurrentState(
+        **next(session_state["client"].board.stream_game_state(session_state["id"]))
     )
-    return cast(str, current_state["state"]["moves"])
 
 
+@mcp.tool(description="Get all previous moves in the match.")  # type: ignore
+async def get_previous_moves() -> list[str]:
+    """Get all previous moves in the match."""
+    current_state = await get_game_state()
+    return cast(list[str], current_state.state.moves.split())
+
+
+@client_is_set_handler
+@id_is_set_handler
 @mcp.tool(description="Make a move.")  # type: ignore
 async def make_move(move: str) -> None:
     """Make a move in the current game."""
     session_state["client"].board.make_move(session_state["id"], move)
+
+
+@mcp.tool(description="Get the current board.")  # type: ignore
+async def get_board() -> str:
+    """An endpoint for getting the current board as an ASCII representation."""
+    board = Board()
+
+    for move in await get_previous_moves():
+        board.push_uci(move)
+
+    return cast(str, board.__str__())
