@@ -1,6 +1,7 @@
 """MCP endpoint schemas."""
 
 import datetime
+from enum import StrEnum
 from typing import Optional
 
 from pydantic import BaseModel, Field
@@ -87,3 +88,24 @@ class CurrentState(BaseModel):
     initial_fen: str = Field(alias="initialFen")
     type: str
     state: State
+
+
+class BoardRepresentation(BaseModel):
+    """The board representation of the game."""
+
+    explanation: str = Field(
+        default="""The board representation of the game.
+        The board is presented from rows 8-1 and a-h."""
+    )
+    board: str
+
+
+class GameStateMsg(StrEnum):
+    """Messages for the game state, e.g., whose turn it is."""
+
+    NOT_STARTED = """The game has not started yet please poll the is_opponent_turn
+    endpoint until 10 times until the game starts. If this does not produce a response
+    in 10 polls then exit.
+    """
+    AGENT_TURN = "It is your turn to make a move."
+    OPPONENT_TURN = "It is the opponent's turn. Please wait for them to make a move."
