@@ -5,7 +5,12 @@ description = "An LLM agent built using Model Context Protocol to play online ga
 authors = [{ name = "Fuzzy Labs", email = "info@fuzzylabs.ai" }]
 readme = "README.md"
 requires-python = ">=3.12,<4.0"
-dependencies = ["berserk>=0.13.2", "mcp[cli]>=1.6.0", "pydantic>=2.11.1"]
+dependencies = [
+    "berserk>=0.13.2",
+    "mcp[cli]>=1.6.0",
+    "pydantic>=2.11.1",
+    "python-chess>=1.999",
+]
 
 [dependency-groups]
 dev = ["pytest>=7.2.0", "pytest-cov>=4.0.0", "licensecheck>=2024.1.2"]
