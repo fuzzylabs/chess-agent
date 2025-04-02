@@ -5,9 +5,6 @@ Aim:
 # 2. Agent is able to start a game
 # 3. Agent is able to play the game by getting the current state and making moves.
 """
-import datetime
-from typing import cast
-
 from collections.abc import Callable
 from typing import Any, cast
 
@@ -74,7 +71,7 @@ async def create_game() -> UIConfig:
     """An endpoint for creating a new game."""
     response = CreatedGame(
         **session_state["client"].challenges.create_ai(color="black", level=BOT_LEVEL)
-
+    )
     session_state["id"] = response.id
 
     return UIConfig(url=f"https://lichess-org.github.io/api-demo/#!/game/{response.id}")
