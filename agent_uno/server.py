@@ -74,7 +74,6 @@ async def create_game() -> UIConfig:
     """An endpoint for creating a new game."""
     response = CreatedGame(
         **session_state["client"].challenges.create_ai(color="black", level=BOT_LEVEL)
-    )
 
     session_state["id"] = response.id
 
