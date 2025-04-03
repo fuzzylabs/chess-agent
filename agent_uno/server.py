@@ -12,6 +12,7 @@ from typing import Any, Optional, cast
 
 from berserk import Client, TokenSession, exceptions
 from chess import Board
+from core.exceptions import GameNotStartedError, MissingSessionStateError
 from core.schemas import (
     AccountInfo,
     BoardRepresentation,
@@ -37,7 +38,7 @@ SESSION_STATE = {}
 
 def _is_value_in_session_state(value: str, msg: str) -> None:
     if value not in SESSION_STATE:
-        raise Exception(f"{value} is not set. {msg}.")
+        raise MissingSessionStateError(f"{value} is not set. {msg}.")
 
 
 def client_is_set_handler(func: Callable[[], Any]) -> Callable[[], Any]:
@@ -115,7 +116,7 @@ async def is_opponent_turn() -> GameStateMsg:
     """Whether the opponent had made there first move or not."""
     moves = await get_previous_moves()
     if isinstance(moves, str):
-        return GameStateMsg.NOT_STARTED
+        raise GameNotStartedError()
 
     n_moves = len(moves)
 
@@ -142,16 +143,6 @@ async def get_game_state() -> CurrentState:
     )
 
 
-@mcp.tool(description="Get all previous moves in the match.")  # type: ignore
-async def get_previous_moves() -> list[str] | GameStateMsg:
-    """Get all previous moves in the match."""
-    try:
-        current_state = await get_game_state()
-    except exceptions.ResponseError:
-        return GameStateMsg.NOT_STARTED
-    return cast(list[str], current_state.state.moves.split())
-
-
 @client_is_set_handler
 @id_is_set_handler
 @mcp.tool(description="Make a move.")  # type: ignore
@@ -160,17 +151,31 @@ async def make_move(move: str) -> None:
     SESSION_STATE["client"].board.make_move(SESSION_STATE["id"], move)
 
 
-@mcp.tool(description="Get the current board.")  # type: ignore
-async def get_board() -> BoardRepresentation | GameStateMsg:
+async def get_previous_moves() -> list[str]:
+    """Get all previous moves in the match."""
+    try:
+        current_state = await get_game_state()
+    except exceptions.ResponseError:
+        raise GameNotStartedError()
+    return cast(list[str], current_state.state.moves.split())
+
+
+async def get_board() -> str:
     """An endpoint for getting the current board as an ASCII representation."""
     moves = await get_previous_moves()
-
-    if isinstance(moves, str):
-        return GameStateMsg.NOT_STARTED
 
     board = Board()
 
     for move in moves:
         board.push_uci(move)
 
-    return BoardRepresentation(board=cast(str, board.__str__()))
+    return cast(str, board.__str__())
+
+
+@mcp.tool(description="Get the current board as an ASCII representation.")  # type: ignore
+async def get_board_representation() -> BoardRepresentation | GameStateMsg:
+    """An endpoint for getting the current board as an ASCII representation."""
+    board = await get_board()
+    previous_moves = await get_previous_moves()
+
+    return BoardRepresentation(board=board, previous_moves=previous_moves)
