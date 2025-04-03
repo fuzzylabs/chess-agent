@@ -1,9 +1,12 @@
 """MCP endpoint schemas."""
 
 import datetime
+from enum import StrEnum
 from typing import Optional
 
 from pydantic import BaseModel, Field
+
+PlayerInfo = dict[str, Optional[int | str | bool]]
 
 
 class AccountInfo(BaseModel):
@@ -22,7 +25,7 @@ class AccountInfo(BaseModel):
     blocking: bool
 
 
-class CreatedGame(BaseModel):
+class CreatedGameAI(BaseModel):
     """The response of creating a new game."""
 
     id: str
@@ -37,6 +40,22 @@ class CreatedGame(BaseModel):
     status: dict[str, str | int]
     player: str
     full_id: str = Field(alias="fullId")
+
+
+class CreatedGamePerson(BaseModel):
+    """The response of creating a new game."""
+
+    id: str
+    url: str
+    status: str
+    challenger: dict[str, Optional[str | int]]
+    dest_user: dict[str, Optional[str | int]] = Field(alias="destUser")
+    variant: dict[str, str]
+    time_control: dict[str, str] = Field(alias="timeControl")
+    color: str
+    final_color: str = Field(alias="finalColor")
+    perf: dict[str, str]
+    direction: str
 
 
 class UIConfig(BaseModel):
@@ -66,8 +85,46 @@ class CurrentState(BaseModel):
     perf: dict[str, str]
     rated: bool
     created_at: datetime.datetime = Field(alias="createdAt")
-    white: dict[str, int]
-    black: dict[str, Optional[str | bool | int]]
+    white: PlayerInfo
+    black: PlayerInfo
     initial_fen: str = Field(alias="initialFen")
     type: str
     state: State
+
+
+class BoardRepresentation(BaseModel):
+    """The board representation of the game."""
+
+    explanation: str = Field(
+        default="""The board representation of the game.
+        The board is presented from rows 8-1 and a-h.
+
+        This is an example board layout:
+
+        r . b q . r k .
+        p p . n . p p p
+        . . p B p n . .
+        . . . p . . . .
+        . . . P . . . .
+        . . P B P . . .
+        P P . . N P P P
+        R N . Q K . . R
+
+        Where 'r . b q . r k .' is row 8 and 'R N . Q K . . R' is row 1.
+
+        Capital letter pieces are white and lowercase letter pieces are black.
+        """
+    )
+    board: str
+    previous_moves: list[str]
+
+
+class GameStateMsg(StrEnum):
+    """Messages for the game state, e.g., whose turn it is."""
+
+    NOT_STARTED = """The game has not started yet please poll the is_opponent_turn
+    endpoint until 10 times until the game starts. If this does not produce a response
+    in 10 polls then exit.
+    """
+    AGENT_TURN = "It is your turn to make a move."
+    OPPONENT_TURN = "It is the opponent's turn. Please wait for them to make a move."
