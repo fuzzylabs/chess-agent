@@ -129,3 +129,7 @@ async def get_board() -> str:
         board.push_uci(move)
 
     return cast(str, board.__str__())
+
+
+if __name__ == "__main__":
+    mcp.run()
