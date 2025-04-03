@@ -44,7 +44,7 @@ uv run mcp install server.py
 
 1. Ask agent to login and create a game against a user:
 
-> Can you please log into the Chess API and then create a game against the user samgwd.
+> Can you please log into the Chess API and then create a game against the user <insert user>.
 
 2. Once the game has been created and the opponent has connected and made their first move, the agent will make their move.
 
