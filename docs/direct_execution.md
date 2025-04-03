@@ -10,7 +10,7 @@ uv run mcp dev server.py
 
 This will start a local server running `Inspector` than can be used to interact with the MCP tools.
 
-![inspector](docs/imgs/inspector.png)
+![inspector](imgs/inspector.png)
 
 ## Under the hood
 
