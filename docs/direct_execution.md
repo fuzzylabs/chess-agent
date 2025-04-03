@@ -46,19 +46,21 @@ As per the MCP docmentation, a client-server lifecycle consists of three stages:
 >
 > Initialization:
 >
-> The client sends an initialize request, including its protocol version and capabilities.
-> The server responds with its protocol version and capabilities.
-> The client sends an initialized notification to acknowledge.
-> Normal message exchange begins.
+> * The client sends an initialize request, including its protocol version and capabilities.
+> * The server responds with its protocol version and capabilities.
+> * The client sends an initialized notification to acknowledge.
+> * Normal message exchange begins.
+>
 > Message Exchange: After initialization, clients and servers can exchange messages using these patterns:
 >
-> Request-Response: The client sends a request, and the server responds.
-> Notifications: Either side sends one-way messages (no response expected).
+> * Request-Response: The client sends a request, and the server responds.
+> * Notifications: Either side sends one-way messages (no response expected).
+>
 > Termination: The connection can be terminated in several ways:
 >
-> Clean shutdown via a close() method.
-> Transport disconnection.
-> Error conditions.
+> * Clean shutdown via a close() method.
+> * Transport disconnection.
+> * Error conditions.
 
 ### Initialisation Requests
 
