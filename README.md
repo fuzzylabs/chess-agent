@@ -1,5 +1,5 @@
 <h1 align="center">
-    agent_uno :chess_pawn:
+    Agent Uno :chess_pawn:
 </h1>
 
 An LLM agent built using Model Context Protocol to play online games
@@ -46,5 +46,16 @@ uv run mcp install server.py
 
 2. Interact with MCP server with Claude Desktop.
 
-Example prompt:
-> Can you please log into the Chess API and then create a game. Once the game has been created the opponent will make the first move. Can you use the previous moves and the layout of the board to determine what an optimal next move will be and then make your own move playing continuously back and forth until completion? Please use the UCI chess standard for your moves, e.g., e2e4.
+:chess_pawn: Agent vs. Stockfish Bot :robot::
+
+> Can you please log into the Chess API and then create a game against an AI. Once the game has been created the opponent will make the first move. Can you use the previous moves and the layout of the board to determine what an optimal next move will be and then make your own move playing continuously back and forth until completion? Please use the UCI chess standard for your moves, e.g., e2e4.
+
+:chess_pawn: Agent vs. User :adult::
+
+1. Ask agent to login and create a game against a user:
+
+> Can you please log into the Chess API and then create a game against the user <insert user>.
+
+2. Once the game has been created and the opponent has connected and made their first move, the agent will make their move.
+
+> Once the game has been created the opponent will make the first move. Can you use the previous moves and the layout of the board to determine what an optimal next move will be and then make your own move playing continuously back and forth until completion? Please use the UCI chess standard for your moves, e.g., e2e4.
