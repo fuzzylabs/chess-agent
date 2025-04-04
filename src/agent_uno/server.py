@@ -6,14 +6,18 @@ Aim:
 # 3. Agent is able to play the game by getting the current state and making moves.
 """
 
+import logging
 import os
 from collections.abc import Callable
 from typing import Any, Optional, cast
 
 from berserk import Client, TokenSession, exceptions
 from chess import Board
-from core.exceptions import GameNotStartedError, MissingSessionStateError
-from core.schemas import (
+from dotenv import load_dotenv
+from mcp.server.fastmcp import FastMCP
+
+from agent_uno.core.exceptions import GameNotStartedError, MissingSessionStateError
+from agent_uno.core.schemas import (
     AccountInfo,
     BoardRepresentation,
     CreatedGameAI,
@@ -22,12 +26,11 @@ from core.schemas import (
     GameStateMsg,
     UIConfig,
 )
-from dotenv import load_dotenv
-from mcp.server.fastmcp import FastMCP
 
 load_dotenv()
 
-mcp = FastMCP("chess-mcp", dependencies=["berserk", "python-chess"])
+logger = logging.getLogger(__name__)
+mcp_server = FastMCP("chess-mcp", dependencies=["berserk", "python-chess"])
 
 BOT_LEVEL = 3
 LICHESS_ADDRESS = "https://lichess.org"
@@ -61,7 +64,7 @@ def id_is_set_handler(func: Callable[[], Any]) -> Callable[[], Any]:
     return is_set_wrapper
 
 
-@mcp.tool(description="Login to LiChess.")  # type: ignore
+@mcp_server.tool(description="Login to LiChess.")  # type: ignore
 async def login() -> None:
     """Login to LiChess using the provided API key.
 
@@ -74,30 +77,34 @@ async def login() -> None:
             "API_KEY not found in environment variables. Please set it in your .env"
         )
     session = TokenSession(api_key)
+    logger.info("Logged into LiChess with API key.")
     SESSION_STATE["client"] = Client(session)
 
 
 @client_is_set_handler
-@mcp.tool(description="Get account info.")  # type: ignore
+@mcp_server.tool(description="Get account info.")  # type: ignore
 async def get_account_info() -> AccountInfo:
     """Get the account info of the logged in user."""
     return AccountInfo(**SESSION_STATE["client"].account.get())
 
 
 @client_is_set_handler
-@mcp.tool(description="Create a new game against an AI.")  # type: ignore
+@mcp_server.tool(description="Create a new game against an AI.")  # type: ignore
 async def create_game_against_ai(level: int = BOT_LEVEL) -> UIConfig:
     """An endpoint for creating a new game."""
     response = CreatedGameAI(
         **SESSION_STATE["client"].challenges.create_ai(color=COLOR, level=level)
     )
+
+    logger.info("Created game against Stockfish AI.")
+
     SESSION_STATE["id"] = response.id
 
     return UIConfig(url=f"{LICHESS_ADDRESS}/{response.id}")
 
 
 @client_is_set_handler
-@mcp.tool(description="Create a new game against a person.")  # type: ignore
+@mcp_server.tool(description="Create a new game against a person.")  # type: ignore
 async def create_game_against_person(username: str) -> UIConfig:
     """An endpoint for creating a new game."""
     response = CreatedGamePerson(
@@ -105,13 +112,15 @@ async def create_game_against_person(username: str) -> UIConfig:
             color=COLOR, username=username, rated=False
         )
     )
+    logger.info(f"Created game against {username}.")
+
     SESSION_STATE["id"] = response.id
 
     return UIConfig(url=f"{LICHESS_ADDRESS}/{response.id}")
 
 
 @client_is_set_handler
-@mcp.tool(description="Whether the opponent had made there first move or not.")  # type: ignore
+@mcp_server.tool(description="Whether the opponent had made there first move or not.")  # type: ignore
 async def is_opponent_turn() -> GameStateMsg:
     """Whether the opponent had made there first move or not."""
     moves = await get_previous_moves()
@@ -128,10 +137,11 @@ async def is_opponent_turn() -> GameStateMsg:
 
 @client_is_set_handler
 @id_is_set_handler
-@mcp.tool(description="End game.")  # type: ignore
+@mcp_server.tool(description="End game.")  # type: ignore
 async def end_game() -> None:
     """End the current game."""
     SESSION_STATE["client"].board.resign_game(SESSION_STATE["id"])
+    logger.info("Game ended.")
 
 
 @client_is_set_handler
@@ -145,7 +155,7 @@ async def get_game_state() -> CurrentState:
 
 @client_is_set_handler
 @id_is_set_handler
-@mcp.tool(description="Make a move.")  # type: ignore
+@mcp_server.tool(description="Make a move.")  # type: ignore
 async def make_move(move: str) -> None:
     """Make a move in the current game."""
     SESSION_STATE["client"].board.make_move(SESSION_STATE["id"], move)
@@ -172,7 +182,7 @@ async def get_board() -> str:
     return cast(str, board.__str__())
 
 
-@mcp.tool(
+@mcp_server.tool(
     description="""Get the current board as an ASCII representation and all previous
     moves."""
 )  # type: ignore
@@ -182,7 +192,3 @@ async def get_board_representation() -> BoardRepresentation | GameStateMsg:
     previous_moves = await get_previous_moves()
 
     return BoardRepresentation(board=board, previous_moves=previous_moves)
-
-
-if __name__ == "__main__":
-    mcp.run()

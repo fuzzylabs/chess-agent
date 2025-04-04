@@ -10,8 +10,8 @@ dependencies = [
     { name = "berserk" },
     { name = "mcp", extra = ["cli"] },
     { name = "pydantic" },
-    { name = "python-dotenv" },
     { name = "python-chess" },
+    { name = "python-dotenv" },
 ]
 
 [package.dev-dependencies]
@@ -26,8 +26,8 @@ requires-dist = [
     { name = "berserk", specifier = ">=0.13.2" },
     { name = "mcp", extras = ["cli"], specifier = ">=1.6.0" },
     { name = "pydantic", specifier = ">=2.11.1" },
-    { name = "python-dotenv", specifier = ">=1.1.0,<2.0.0" },
     { name = "python-chess", specifier = ">=1.999" },
+    { name = "python-dotenv", specifier = ">=1.1.0,<2.0.0" },
 ]
 
 [package.metadata.requires-dev]
