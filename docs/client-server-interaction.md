@@ -241,6 +241,19 @@ messages.append({
 })
 ```
 
+8. Finally, re-prompt LLM with the updated messages object to get a final response to the user:
+
+```python
+response = self.anthropic.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1000,
+    messages=messages,
+    tools=available_tools
+)
+
+final_text.append(response.content[0].text)
+```
+
 The following diagram illustrates the end-to-end process of requesting the agent to login to the Lichess API from user query to response using the MCP server and LLM:
 
 ![mcp-message-exchange-e2e](imgs/mcp-message-exchange-e2e.png)
