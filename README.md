@@ -28,6 +28,7 @@ make project-setup
 
 <details>
 <summary>Docker (Recommended)</summary>
+
 ```json
 {
     "mcpServers": {
@@ -42,7 +43,8 @@ make project-setup
 
 <details>
 <summary>uv</summary>
-```
+
+```json
 {
     "mcpServers": {
         "mcp-chess": {
