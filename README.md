@@ -63,7 +63,14 @@ uv run mcp install server.py
 > 2. Not having `coreutils` installed.
 >  - This is required for the `realpath` command. You will see the following error in Claude logs: `realpath: command not found`. You can install it using `brew install coreutils`.
 
+## Application Tests
 
+Application tests for the MCP server can be run with the following command:
+
+```bash
+uv run application_tests/tests.py
+```
+  
 ## Documentation
 
 Documentation for this project can be found in the [docs](docs) directory. The following documentation is available:
