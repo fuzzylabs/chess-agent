@@ -29,7 +29,7 @@ make project-setup
 <details>
 <summary>Docker (Recommended)</summary>
 <br>
-<code>
+```json
 {
     "mcpServers": {
         "mcp-chess": {
@@ -38,13 +38,13 @@ make project-setup
         }
     }
 }
-</code>
+```
 </details>
 
 <details>
 <summary>uv</summary>
 <br>
-<code>
+```
 {
     "mcpServers": {
         "mcp-chess": {
@@ -53,7 +53,7 @@ make project-setup
         }
     }
 }
-</code>
+```
 </details>
 
 > [!TIP]
