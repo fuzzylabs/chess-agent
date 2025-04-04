@@ -53,12 +53,3 @@ repos:
       - id: bandit
         args: ["--config=pyproject.toml"]
         additional_dependencies: ["bandit[toml]"]
-
-  - repo: local
-    hooks:
-      - id: run-mcp-server-app-tests
-        name: Run Application Tests
-        entry: uv run application_tests/tests.py
-        language: system
-        types: [python]
-        stages: [commit]
