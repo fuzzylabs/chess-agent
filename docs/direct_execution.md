@@ -5,7 +5,7 @@
 Currently testing of endpoints can be performed with the following command:
 
 ```bash
-uv run mcp dev server.py
+uv run mcp dev src/agent_uno/server.py:mcp_server
 ```
 
 This will start a local server running `Inspector` than can be used to interact with the MCP tools.
@@ -17,7 +17,7 @@ This will start a local server running `Inspector` than can be used to interact 
 You can run the server directly with the following command:
 
 ```bash
-uv run mcp run server.py --transport sse
+uv run agent-uno --transport sse
 ```
 
 > [!NOTE]
