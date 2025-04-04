@@ -258,7 +258,7 @@ The following diagram illustrates the end-to-end process of requesting the agent
 
 ![mcp-message-exchange-e2e](imgs/mcp-message-exchange-e2e.png)
 
-## Writing Servers with FastMCP
+## Simplified Client Connection using FastMCP
 
 The [FastMCP documentation](https://github.com/modelcontextprotocol/python-sdk?tab=readme-ov-file#writing-mcp-clients) outlines how the above two code snippets can be performed in a single block:
 
