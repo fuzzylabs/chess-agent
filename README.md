@@ -34,6 +34,16 @@ cd agent_uno
 uv run mcp install server.py
 ```
 
+> [!NOTE]
+> If you have Claude Desktop open when you run the above command, you will need to restart it for the server to be available.
+
+> [!WARNING]
+> Common Issues:
+> 1. `ENOENT` error when opening Claude Desktop.
+>   - This is due to Claude Desktop facing issues with running the server with a relative path to `uv`. To fix this, you need to change the `command` in the `claude_desktop_config.json` config to an absolute path. You can find the absolute path by running `which uv` in your terminal.
+> 2. Not having `coreutils` installed.
+>  - This is required for the `realpath` command. You will see the following error in Claude logs: `realpath: command not found`. You can install it using `brew install coreutils`.
+
 2. Interact with MCP server with Claude Desktop.
 
 :chess_pawn: Agent vs. Stockfish Bot :robot::
@@ -49,6 +59,3 @@ uv run mcp install server.py
 2. Once the game has been created and the opponent has connected and made their first move, the agent will make their move.
 
 > Once the game has been created the opponent will make the first move. Can you use the previous moves and the layout of the board to determine what an optimal next move will be and then make your own move playing continuously back and forth until completion? Please use the UCI chess standard for your moves, e.g., e2e4.
-
-> [!NOTE]
-> If you face issues with server starting in the Claude desktop this could be because of the relative path for the `command` in the server config. This will need to be changed to the absolute path to `uv` on your machine in this case. See [GH issue](https://github.com/cline/cline/issues/1160) for more details.
