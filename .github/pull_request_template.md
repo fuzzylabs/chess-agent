@@ -16,6 +16,7 @@ _If new dependencies are introduced to the project, please list them here:_
 
 Please ensure you have done the following:
 
+* [ ] I have run application tests ensuring nothing has broken.
 * [ ] I have updated the documentation if required.
 * [ ] I have added tests which cover my changes.
 
