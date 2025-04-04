@@ -6,14 +6,18 @@ Aim:
 # 3. Agent is able to play the game by getting the current state and making moves.
 """
 
+import logging
 import os
 from collections.abc import Callable
 from typing import Any, Optional, cast
 
 from berserk import Client, TokenSession, exceptions
 from chess import Board
-from core.exceptions import GameNotStartedError, MissingSessionStateError
-from core.schemas import (
+from dotenv import load_dotenv
+from mcp.server.fastmcp import FastMCP
+
+from agent_uno.core.exceptions import GameNotStartedError, MissingSessionStateError
+from agent_uno.core.schemas import (
     AccountInfo,
     BoardRepresentation,
     CreatedGameAI,
@@ -22,11 +26,10 @@ from core.schemas import (
     GameStateMsg,
     UIConfig,
 )
-from dotenv import load_dotenv
-from mcp.server.fastmcp import FastMCP
 
 load_dotenv()
 
+logger = logging.getLogger(__name__)
 mcp = FastMCP("chess-mcp", dependencies=["berserk", "python-chess"])
 
 BOT_LEVEL = 3
@@ -74,6 +77,7 @@ async def login() -> None:
             "API_KEY not found in environment variables. Please set it in your .env"
         )
     session = TokenSession(api_key)
+    logger.info("Logged into LiChess with API key.")
     SESSION_STATE["client"] = Client(session)
 
 
@@ -91,6 +95,9 @@ async def create_game_against_ai(level: int = BOT_LEVEL) -> UIConfig:
     response = CreatedGameAI(
         **SESSION_STATE["client"].challenges.create_ai(color=COLOR, level=level)
     )
+
+    logger.info("Created game against Stockfish AI.")
+
     SESSION_STATE["id"] = response.id
 
     return UIConfig(url=f"{LICHESS_ADDRESS}/{response.id}")
@@ -105,6 +112,8 @@ async def create_game_against_person(username: str) -> UIConfig:
             color=COLOR, username=username, rated=False
         )
     )
+    logger.info(f"Created game against {username}.")
+
     SESSION_STATE["id"] = response.id
 
     return UIConfig(url=f"{LICHESS_ADDRESS}/{response.id}")
@@ -132,6 +141,7 @@ async def is_opponent_turn() -> GameStateMsg:
 async def end_game() -> None:
     """End the current game."""
     SESSION_STATE["client"].board.resign_game(SESSION_STATE["id"])
+    logger.info("Game ended.")
 
 
 @client_is_set_handler
