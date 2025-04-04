@@ -160,16 +160,20 @@ async def get_previous_moves() -> list[str]:
     return cast(list[str], current_state.state.moves.split())
 
 
-async def get_board() -> str:
+async def _get_fen() -> str:
+    return cast(
+        str,
+        next(SESSION_STATE["client"].games.stream_game_moves(SESSION_STATE["id"]))[
+            "fen"
+        ],
+    )
+
+
+async def get_board() -> Board:
     """An endpoint for getting the current board as an ASCII representation."""
-    moves = await get_previous_moves()
+    fen = await _get_fen()
 
-    board = Board()
-
-    for move in moves:
-        board.push_uci(move)
-
-    return cast(str, board.__str__())
+    return Board(fen)
 
 
 @mcp.tool(
@@ -181,7 +185,9 @@ async def get_board_representation() -> BoardRepresentation | GameStateMsg:
     board = await get_board()
     previous_moves = await get_previous_moves()
 
-    return BoardRepresentation(board=board, previous_moves=previous_moves)
+    return BoardRepresentation(
+        board=board.__str__(), previous_moves=previous_moves, check=board.is_check()
+    )
 
 
 if __name__ == "__main__":
