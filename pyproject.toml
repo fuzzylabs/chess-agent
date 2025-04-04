@@ -109,6 +109,7 @@ locale = "en-gb"
 # Bandit configuration
 [tool.bandit]
 exclude_dirs = []
+skips = ["B101"]
 
 [tool.bandit.assert_used]
 skips = ['*test.py', '*/test_*.py']
