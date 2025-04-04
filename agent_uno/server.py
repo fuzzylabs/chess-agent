@@ -172,10 +172,17 @@ async def get_board() -> str:
     return cast(str, board.__str__())
 
 
-@mcp.tool(description="Get the current board as an ASCII representation.")  # type: ignore
+@mcp.tool(
+    description="""Get the current board as an ASCII representation and all previous
+    moves."""
+)  # type: ignore
 async def get_board_representation() -> BoardRepresentation | GameStateMsg:
     """An endpoint for getting the current board as an ASCII representation."""
     board = await get_board()
     previous_moves = await get_previous_moves()
 
     return BoardRepresentation(board=board, previous_moves=previous_moves)
+
+
+if __name__ == "__main__":
+    mcp.run()
