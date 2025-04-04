@@ -28,7 +28,6 @@ make project-setup
 
 <details>
 <summary>Docker (Recommended)</summary>
-<br>
 ```json
 {
     "mcpServers": {
@@ -43,7 +42,6 @@ make project-setup
 
 <details>
 <summary>uv</summary>
-<br>
 ```
 {
     "mcpServers": {
