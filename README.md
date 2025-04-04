@@ -84,3 +84,11 @@ make project-setup
 >   - This is due to Claude Desktop facing issues with running the server with a relative path to `uv`. To fix this, you need to change the `command` in the `claude_desktop_config.json` config to an absolute path. You can find the absolute path by running `which uv` in your terminal.
 > 2. Not having `coreutils` installed.
 >  - This is required for the `realpath` command. You will see the following error in Claude logs: `realpath: command not found`. You can install it using `brew install coreutils`.
+
+## Application Tests
+
+Application tests for the MCP server can be run with the following command:
+
+```bash
+uv run application_tests/tests.py
+```
