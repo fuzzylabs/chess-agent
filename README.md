@@ -29,6 +29,10 @@ make project-setup
 <details>
 <summary>Docker (Recommended)</summary>
 
+```bash
+docker build -t mcp-chess .
+```
+
 ```json
 {
     "mcpServers": {
@@ -44,16 +48,14 @@ make project-setup
 <details>
 <summary>uv</summary>
 
-```json
-{
-    "mcpServers": {
-        "mcp-chess": {
-            "command": "uv",
-            "args": ["run",  "mcp-chess"]
-        }
-    }
-}
+```bash
+cd src/agent_uno
 ```
+
+```python
+uv run mcp install server.py:mcp_server
+```
+
 </details>
 
 > [!TIP]

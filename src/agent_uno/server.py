@@ -13,11 +13,8 @@ from typing import Any, Optional, cast
 
 from berserk import Client, TokenSession, exceptions
 from chess import Board
-from dotenv import load_dotenv
-from mcp.server.fastmcp import FastMCP
-
-from agent_uno.core.exceptions import GameNotStartedError, MissingSessionStateError
-from agent_uno.core.schemas import (
+from core.exceptions import GameNotStartedError, MissingSessionStateError
+from core.schemas import (
     AccountInfo,
     BoardRepresentation,
     CreatedGameAI,
@@ -26,6 +23,8 @@ from agent_uno.core.schemas import (
     GameStateMsg,
     UIConfig,
 )
+from dotenv import load_dotenv
+from mcp.server.fastmcp import FastMCP
 
 load_dotenv()
 
