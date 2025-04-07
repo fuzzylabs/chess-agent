@@ -24,14 +24,10 @@ make project-setup
 
 ## Quick Start
 
-<<<<<<< HEAD
-1. Add server config in client environment:
+### 1. Add server config in client environment:
 
 <details>
 <summary>Docker (Recommended)</summary>
-=======
-### 1. Install server in Claude Desktop:
->>>>>>> main
 
 ```bash
 docker build -t mcp-chess .
