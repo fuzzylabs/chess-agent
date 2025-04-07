@@ -9,8 +9,8 @@ from mcp.types import TextContent
 OKGREEN = "\033[92m"
 ENDC = "\033[0m"
 
-COMMAND = "python"
-ARGS = ["agent_uno/server.py"]
+COMMAND = "uv"
+ARGS = ["run", "agent-uno"]
 SERVER_PARAMS = StdioServerParameters(
     command=COMMAND,
     args=ARGS,
@@ -88,7 +88,7 @@ EXPECTED_LIST_TOOLS_RESPONSE = [
     {
         "name": "get_board_representation",
         "description": "Get the current board as an ASCII representation and all "
-        "previous\n    moves.",
+        "previous moves.",
         "inputSchema": {
             "properties": {},
             "title": "get_board_representationArguments",

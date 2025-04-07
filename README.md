@@ -24,15 +24,39 @@ make project-setup
 
 ## Quick Start
 
-### 1. Install server in Claude Desktop:
+### 1. Add server config in client environment:
+
+<details>
+<summary>Docker (Recommended)</summary>
 
 ```bash
-cd agent_uno
+docker build -t mcp-chess .
 ```
 
-```bash
-uv run mcp install server.py
+```json
+{
+    "mcpServers": {
+        "mcp-chess": {
+            "command": "docker",
+            "args": ["run", "-i", "--rm", "mcp-chess"]
+        }
+    }
+}
 ```
+</details>
+
+<details>
+<summary>uv</summary>
+
+```bash
+cd src/agent_uno
+```
+
+```python
+uv run mcp install server.py:mcp_server
+```
+
+</details>
 
 > [!TIP]
 > The above command updates the MCP config in Claude desktop. Whilst Claude Desktop only supports `stdio` transport the server can be directly executed with communication via `sse` transport and HTTP requests. For documentation on how to do this see [direct_execution.md](docs/direct_execution.md).
