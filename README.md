@@ -70,7 +70,7 @@ Application tests for the MCP server can be run with the following command:
 ```bash
 uv run application_tests/tests.py
 ```
-  
+
 ## Documentation
 
 Documentation for this project can be found in the [docs](docs) directory. The following documentation is available:
