@@ -4,7 +4,7 @@
 
 An LLM agent built using Model Context Protocol to play online games
 
-# Pre-requisites
+## Pre-requisites
 
 - `uv` installable via brew.
 - [Claude Desktop](https://claude.ai/download)
@@ -22,9 +22,9 @@ Set up project:
 make project-setup
 ```
 
-# Quick Start
+## Quick Start
 
-1. Install server in Claude Desktop:
+### 1. Install server in Claude Desktop:
 
 ```bash
 cd agent_uno
@@ -40,13 +40,13 @@ uv run mcp install server.py
 > [!NOTE]
 > If you have Claude Desktop open when you run the above command, you will need to restart it for the server to be available.
 
-2. Interact with MCP server with Claude Desktop.
+### 2. Interact with MCP server with Claude Desktop.
 
-:chess_pawn: Agent vs. Stockfish Bot :robot::
+#### :chess_pawn: Agent vs. Stockfish Bot :robot::
 
 > Can you please log into the Chess API and then create a game against an AI. Once the game has been created the opponent will make the first move. Can you use the previous moves and the layout of the board to determine what an optimal next move will be and then make your own move playing continuously back and forth until completion? Please use the UCI chess standard for your moves, e.g., e2e4.
 
-:chess_pawn: Agent vs. User :adult::
+#### :chess_pawn: Agent vs. User :adult::
 
 1. Ask agent to login and create a game against a user:
 
@@ -70,3 +70,17 @@ Application tests for the MCP server can be run with the following command:
 ```bash
 uv run application_tests/tests.py
 ```
+
+## Documentation
+
+Documentation for this project can be found in the [docs](docs) directory. The following documentation is available:
+
+* [direct_execution.md](docs/direct_execution.md): Documentation on how to run the server directly with `sse` transport and HTTP requests.
+* [client-server-interaction.md](docs/client-server-interaction.md): Documentation on how MCP clients and servers interact with each other and how clients process user queries.
+
+## Useful Links
+* [Model Context Protocol](https://modelcontextprotocol.io/)
+* [Client Development Docs](https://modelcontextprotocol.io/quickstart/client)
+* [Server Development Docs](https://modelcontextprotocol.io/quickstart/server)
+* [FastMCP](https://github.com/modelcontextprotocol/python-sdk)
+* [Claude Messages API](https://github.com/anthropics/anthropic-sdk-python/blob/8b244157a7d03766bec645b0e1dc213c6d462165/src/anthropic/resources/messages/messages.py)
