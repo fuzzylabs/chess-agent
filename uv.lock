@@ -3,41 +3,6 @@ revision = 1
 requires-python = ">=3.12, <4.0"
 
 [[package]]
-name = "agent-uno"
-version = "0.0.1"
-source = { editable = "." }
-dependencies = [
-    { name = "berserk" },
-    { name = "mcp", extra = ["cli"] },
-    { name = "pydantic" },
-    { name = "python-dotenv" },
-    { name = "python-chess" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "licensecheck" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "berserk", specifier = ">=0.13.2" },
-    { name = "mcp", extras = ["cli"], specifier = ">=1.6.0" },
-    { name = "pydantic", specifier = ">=2.11.1" },
-    { name = "python-dotenv", specifier = ">=1.1.0,<2.0.0" },
-    { name = "python-chess", specifier = ">=1.999" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "licensecheck", specifier = ">=2024.1.2" },
-    { name = "pytest", specifier = ">=7.2.0" },
-    { name = "pytest-cov", specifier = ">=4.0.0" },
-]
-
-[[package]]
 name = "annotated-types"
 version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
@@ -164,6 +129,41 @@ name = "chess"
 version = "1.11.2"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/93/09/7d04d7581ae3bb8b598017941781bceb7959dd1b13e3ebf7b6a2cd843bc9/chess-1.11.2.tar.gz", hash = "sha256:a8b43e5678fdb3000695bdaa573117ad683761e5ca38e591c4826eba6d25bb39", size = 6131385 }
+
+[[package]]
+name = "chess-agent"
+version = "0.0.1"
+source = { editable = "." }
+dependencies = [
+    { name = "berserk" },
+    { name = "mcp", extra = ["cli"] },
+    { name = "pydantic" },
+    { name = "python-chess" },
+    { name = "python-dotenv" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "licensecheck" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "berserk", specifier = ">=0.13.2" },
+    { name = "mcp", extras = ["cli"], specifier = ">=1.6.0" },
+    { name = "pydantic", specifier = ">=2.11.1" },
+    { name = "python-chess", specifier = ">=1.999" },
+    { name = "python-dotenv", specifier = ">=1.1.0,<2.0.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "licensecheck", specifier = ">=2024.1.2" },
+    { name = "pytest", specifier = ">=7.2.0" },
+    { name = "pytest-cov", specifier = ">=4.0.0" },
+]
 
 [[package]]
 name = "click"

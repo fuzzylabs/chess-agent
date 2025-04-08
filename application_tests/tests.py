@@ -10,7 +10,7 @@ OKGREEN = "\033[92m"
 ENDC = "\033[0m"
 
 COMMAND = "python"
-ARGS = ["agent_uno/server.py"]
+ARGS = ["chess_agent/server.py"]
 SERVER_PARAMS = StdioServerParameters(
     command=COMMAND,
     args=ARGS,
