@@ -1,5 +1,5 @@
 <h1 align="center">
-    Agent Uno :chess_pawn:
+    Chess Agent :chess_pawn:
 </h1>
 
 An LLM agent built using Model Context Protocol to play online games
@@ -27,7 +27,7 @@ make project-setup
 ### 1. Install server in Claude Desktop:
 
 ```bash
-cd agent_uno
+cd chess_agent
 ```
 
 ```bash

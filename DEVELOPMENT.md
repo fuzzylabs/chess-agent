@@ -1,6 +1,6 @@
 # Developer Readme
 
-This document contains documentation intended for developers of agent_uno.
+This document contains documentation intended for developers of chess_agent.
 
 Pre-requisites:
 
@@ -9,7 +9,7 @@ Pre-requisites:
 > Note: In order for the pre-commit hooks to function properly, your Docker daemon should be running during setup.
 
 ## First time setup
-If you're creating agent_uno for the first time, you'll need to configure your local development environment along with the remote repository.
+If you're creating chess_agent for the first time, you'll need to configure your local development environment along with the remote repository.
 
 You can do this by simply running:
 
@@ -23,7 +23,7 @@ This will install Python `3.12` using PyEnv, create a virtual environment using 
 
 ## Developer environment setup
 
-To work on the agent_uno as a developer, you'll need to configure your local development environment. You can do this by simply running:
+To work on the chess_agent as a developer, you'll need to configure your local development environment. You can do this by simply running:
 ```bash
 make project-setup
 ```

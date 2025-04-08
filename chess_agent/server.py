@@ -1,9 +1,9 @@
 """An MCP server for playing Chess with LiChess.
 
 Aim:
-# 1. Agent logs in with an API key
-# 2. Agent is able to start a game
-# 3. Agent is able to play the game by getting the current state and making moves.
+1. Agent logs in with an API key
+2. Agent is able to start a game
+3. Agent is able to play the game by getting the current state and making moves.
 """
 
 import logging
