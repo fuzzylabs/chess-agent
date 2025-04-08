@@ -1,7 +1,7 @@
 [project]
 name = "chess_agent"
 version = "0.0.1"
-description = "An LLM agent built using Model Context Protocol to play online games package."
+description = "An LLM agent built using Model Context Protocol to play chess using the LiChess API."
 authors = [{ name = "Fuzzy Labs", email = "info@fuzzylabs.ai" }]
 readme = "README.md"
 requires-python = ">=3.12,<4.0"
