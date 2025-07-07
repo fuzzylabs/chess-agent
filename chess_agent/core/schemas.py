@@ -2,11 +2,10 @@
 
 import datetime
 from enum import StrEnum
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
-PlayerInfo = dict[str, Optional[int | str | bool]]
+PlayerInfo = dict[str, int | str | bool | None]
 
 
 GAME_EXPLANATION = """You are the Black side in every game, meaning that you will always
@@ -108,8 +107,8 @@ class CreatedGamePerson(BaseModel):
     id: str
     url: str
     status: str
-    challenger: dict[str, Optional[str | int]]
-    dest_user: dict[str, Optional[str | int]] = Field(alias="destUser")
+    challenger: dict[str, str | int | None]
+    dest_user: dict[str, str | int | None] = Field(alias="destUser")
     variant: dict[str, str]
     time_control: dict[str, str] = Field(alias="timeControl")
     color: str
